@@ -69,7 +69,7 @@ function getStringFromTemplate(firstName, lastName) {
  *   'Hello, Chuck Norris!' => 'Chuck Norris'
  */
 function extractNameFromTemplate(value) {
-  return value.replace(/Hello, (\w+) (\w+)!/, '$1 $2');
+  return value.replace(/.+, (\w+) (\w+)!/, '$1 $2');
   // throw new Error('Not implemented');
 }
 
@@ -214,11 +214,8 @@ function extractEmails(str) {
  *
  */
 function getRectangleString(width, height) {
-  const top = `┌${'─'.repeat(width - 2)}┐\n`;
-  const bottom = `└${'─'.repeat(width - 2)}┘\n`;
-  const between = `│${' '.repeat(width - 2)}│\n`;
-  const box = top + between.repeat(height - 2) + bottom;
-  return box;
+  const f = (a, b, c, d, n) => a + b.repeat(d - 2) + c + n;
+  return f(f('┌', '─', '┐', width, '\n'), f('│', ' ', '│', width, '\n'), f('└', '─', '┘', width, '\n'), height, '');
   // throw new Error('Not implemented');
 }
 

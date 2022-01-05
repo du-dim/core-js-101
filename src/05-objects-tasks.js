@@ -126,27 +126,57 @@ const cssSelectorBuilder = {
   errorText2: 'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element',
 
   element(value) {
-    this.bodSolve(0, value);
+    const obj = Object.create(this);
+    obj.order = this.order.concat(0);
+    this.checkOrder(obj.order);
+    this.checkValid(obj.order);
+    obj.result = this.result + value;
+    return obj;
   },
 
   id(value) {
-    this.bodSolve(1, `#${value}`);
+    const obj = Object.create(this);
+    obj.order = this.order.concat(1);
+    this.checkOrder(obj.order);
+    this.checkValid(obj.order);
+    obj.result = `${this.result}#${value}`;
+    return obj;
   },
 
   class(value) {
-    this.bodSolve(2, `.${value}`);
+    const obj = Object.create(this);
+    obj.order = this.order.concat(2);
+    this.checkOrder(obj.order);
+    this.checkValid(obj.order);
+    obj.result = `${this.result}.${value}`;
+    return obj;
   },
 
   attr(value) {
-    this.bodSolve(3, `[${value}]`);
+    const obj = Object.create(this);
+    obj.order = this.order.concat(3);
+    this.checkOrder(obj.order);
+    this.checkValid(obj.order);
+    obj.result = `${this.result}[${value}]`;
+    return obj;
   },
 
   pseudoClass(value) {
-    this.bodSolve(4, `:${value}`);
+    const obj = Object.create(this);
+    obj.order = this.order.concat(4);
+    this.checkOrder(obj.order);
+    this.checkValid(obj.order);
+    obj.result = `${this.result}:${value}`;
+    return obj;
   },
 
   pseudoElement(value) {
-    this.bodSolve(5, `::${value}`);
+    const obj = Object.create(this);
+    obj.order = this.order.concat(5);
+    this.checkOrder(obj.order);
+    this.checkValid(obj.order);
+    obj.result = `${this.result}::${value}`;
+    return obj;
   },
 
   combine(selector1, combinator, selector2) {
@@ -158,18 +188,9 @@ const cssSelectorBuilder = {
   stringify() {
     return this.result;
   },
-
-  bodSolve(num, value) {
-    const obj = Object.create(this);
-    obj.order = this.order.concat(num);
-    this.checkOrder(obj.order);
-    this.checkValid(obj.order);
-    obj.result = this.result + value;
-    return obj;
-  },
   // eslint-disable-next-line consistent-return
   checkOrder(order) {
-    const copy = order;
+    const copy = Array(order.length).fill().map((_, i) => order[i]);
     copy.sort((a, b) => a - b);
     if (!(copy.every((e, i) => e === order[i]))) this.error(this.errorText2);
   },
@@ -177,7 +198,7 @@ const cssSelectorBuilder = {
   checkValid(order) {
     const index = order.filter((e) => (e < 2) || (e > 4))
       .findIndex((e, i, a) => a.indexOf(e) !== i);
-    if (index < 0) this.error(this.errorText1);
+    if (index >= 0) this.error(this.errorText1);
   },
 
   error(error) {

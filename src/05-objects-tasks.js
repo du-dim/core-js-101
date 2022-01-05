@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-unused-expressions */
 /* ************************************************************************************************
  *                                                                                                *
  * Please read the following tutorial before implementing tasks:                                   *
@@ -117,50 +120,86 @@ function fromJSON(proto, json) {
 
 const cssSelectorBuilder = {
   result: '',
+  order: [],
+  indicatorValid: true,
+  indicatorOrder: true,
   element(value) {
     const obj = Object.create(this);
+    obj.order = this.order.concat(0);
+    obj.indicatorOrder = this.checkOrder(obj.order);
+    obj.indicatorValid = this.checkValid(obj.order);
     obj.result = this.result + value;
     return obj;
   },
 
   id(value) {
     const obj = Object.create(this);
+    obj.order = this.order.concat(1);
+    obj.indicatorOrder = this.checkOrder(obj.order);
+    obj.indicatorValid = this.checkValid(obj.order);
     obj.result = `${this.result}#${value}`;
     return obj;
   },
 
   class(value) {
     const obj = Object.create(this);
+    obj.order = this.order.concat(2);
+    obj.indicatorOrder = this.checkOrder(obj.order);
+    obj.indicatorValid = this.checkValid(obj.order);
     obj.result = `${this.result}.${value}`;
     return obj;
   },
 
   attr(value) {
     const obj = Object.create(this);
+    obj.order = this.order.concat(3);
+    obj.indicatorOrder = this.checkOrder(obj.order);
+    obj.indicatorValid = this.checkValid(obj.order);
     obj.result = `${this.result}[${value}]`;
     return obj;
   },
 
   pseudoClass(value) {
     const obj = Object.create(this);
+    obj.order = this.order.concat(4);
+    obj.indicatorOrder = this.checkOrder(obj.order);
+    obj.indicatorValid = this.checkValid(obj.order);
     obj.result = `${this.result}:${value}`;
     return obj;
   },
 
   pseudoElement(value) {
     const obj = Object.create(this);
+    obj.order = this.order.concat(5);
+    obj.indicatorOrder = this.checkOrder(obj.order);
+    obj.indicatorValid = this.checkValid(obj.order);
     obj.result = `${this.result}::${value}`;
     return obj;
   },
 
   combine(selector1, combinator, selector2) {
     const obj = Object.create(this);
+    obj.indicatorValid = !(!selector1.indicatorValid || !selector2.indicatorValid);
+    obj.indicatorOrder = !(!selector1.indicatorOrder || !selector2.indicatorOrder);
     obj.result = `${selector1.result} ${combinator} ${selector2.result}`;
     return obj;
   },
 
   stringify() {
-    return this.result;
+    const error1 = 'Element, id and pseudo-element should not occur more then one time inside the selector';
+    const error2 = 'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element';
+    return !this.indicatorValid ? error1 : !this.indicatorOrder ? error2 : this.result;
+  },
+
+  checkOrder(order) {
+    const index = order.findIndex((e, i) => e < order[i - 1]);
+    return index < 0;
+  },
+
+  checkValid(order) {
+    const index = order.filter((e) => (e < 2) || (e > 4))
+      .findIndex((e, i, a) => a.indexOf(e) !== i);
+    return order.length > 1 ? index < 0 : true;
   },
 };
 

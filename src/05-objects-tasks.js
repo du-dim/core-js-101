@@ -147,6 +147,7 @@ const cssSelectorBuilder = {
     const obj = Object.create(this);
     obj.order = this.order.concat(2);
     this.checkOrder(obj.order);
+    this.checkValid(obj.order);
     obj.result = `${this.result}.${value}`;
     return obj;
   },
@@ -155,6 +156,7 @@ const cssSelectorBuilder = {
     const obj = Object.create(this);
     obj.order = this.order.concat(3);
     this.checkOrder(obj.order);
+    this.checkValid(obj.order);
     obj.result = `${this.result}[${value}]`;
     return obj;
   },
@@ -163,6 +165,7 @@ const cssSelectorBuilder = {
     const obj = Object.create(this);
     obj.order = this.order.concat(4);
     this.checkOrder(obj.order);
+    this.checkValid(obj.order);
     obj.result = `${this.result}:${value}`;
     return obj;
   },
@@ -187,26 +190,19 @@ const cssSelectorBuilder = {
   },
   // eslint-disable-next-line consistent-return
   checkOrder(order) {
-    try {
-      const index = order.findIndex((e, i) => e < order[i - 1]);
-      if (index < 0) this.error(this.errorText2);
-    } catch (err) {
-      console.error(err);
-    }
+    const copy = order;
+    copy.sort((a, b) => a - b);
+    if (!(copy.every((e, i) => e === order[i]))) this.error(this.errorText2);
   },
   // eslint-disable-next-line consistent-return
   checkValid(order) {
-    try {
-      const index = order.filter((e) => (e < 2) || (e > 4))
-        .findIndex((e, i, a) => a.indexOf(e) !== i);
-      if (index < 0) this.error(this.errorText1);
-    } catch (err) {
-      console.error(err);
-    }
+    const index = order.filter((e) => (e < 2) || (e > 4))
+      .findIndex((e, i, a) => a.indexOf(e) !== i);
+    if (index < 0) this.error(this.errorText1);
   },
 
   error(error) {
-    throw new RangeError(error);
+    throw new Error(error);
   },
 };
 

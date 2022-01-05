@@ -154,17 +154,13 @@ const cssSelectorBuilder = {
   checkOrder(order) {
     const copy = Array(order.length).fill().map((_, i) => order[i]);
     copy.sort((a, b) => a - b);
-    if (!(copy.every((e, i) => e === order[i]))) this.error(this.errorText2);
+    if (!(copy.every((e, i) => e === order[i]))) throw new Error(this.errorText2);
   },
   // eslint-disable-next-line consistent-return
   checkValid(order) {
     const index = order.filter((e) => (e < 2) || (e > 4))
       .findIndex((e, i, a) => a.indexOf(e) !== i);
-    if (index >= 0) this.error(this.errorText1);
-  },
-
-  error(error) {
-    throw new Error(error);
+    if (index >= 0) throw new Error(this.errorText1);
   },
 };
 

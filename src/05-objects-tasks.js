@@ -125,59 +125,12 @@ const cssSelectorBuilder = {
   errorText1: 'Element, id and pseudo-element should not occur more then one time inside the selector',
   errorText2: 'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element',
 
-  element(value) {
-    const obj = Object.create(this);
-    obj.order = this.order.concat(0);
-    this.checkOrder(obj.order);
-    this.checkValid(obj.order);
-    obj.result = this.result + value;
-    return obj;
-  },
-
-  id(value) {
-    const obj = Object.create(this);
-    obj.order = this.order.concat(1);
-    this.checkOrder(obj.order);
-    this.checkValid(obj.order);
-    obj.result = `${this.result}#${value}`;
-    return obj;
-  },
-
-  class(value) {
-    const obj = Object.create(this);
-    obj.order = this.order.concat(2);
-    this.checkOrder(obj.order);
-    this.checkValid(obj.order);
-    obj.result = `${this.result}.${value}`;
-    return obj;
-  },
-
-  attr(value) {
-    const obj = Object.create(this);
-    obj.order = this.order.concat(3);
-    this.checkOrder(obj.order);
-    this.checkValid(obj.order);
-    obj.result = `${this.result}[${value}]`;
-    return obj;
-  },
-
-  pseudoClass(value) {
-    const obj = Object.create(this);
-    obj.order = this.order.concat(4);
-    this.checkOrder(obj.order);
-    this.checkValid(obj.order);
-    obj.result = `${this.result}:${value}`;
-    return obj;
-  },
-
-  pseudoElement(value) {
-    const obj = Object.create(this);
-    obj.order = this.order.concat(5);
-    this.checkOrder(obj.order);
-    this.checkValid(obj.order);
-    obj.result = `${this.result}::${value}`;
-    return obj;
-  },
+  element(value) { return this.bodSolve(0, value); },
+  id(value) { return this.bodSolve(1, `#${value}`); },
+  class(value) { return this.bodSolve(2, `.${value}`); },
+  attr(value) { return this.bodSolve(3, `[${value}]`); },
+  pseudoClass(value) { return this.bodSolve(4, `:${value}`); },
+  pseudoElement(value) { return this.bodSolve(5, `::${value}`); },
 
   combine(selector1, combinator, selector2) {
     const obj = Object.create(this);
@@ -187,6 +140,15 @@ const cssSelectorBuilder = {
 
   stringify() {
     return this.result;
+  },
+
+  bodSolve(num, value) {
+    const obj = Object.create(this);
+    obj.order = this.order.concat(num);
+    this.checkOrder(obj.order);
+    this.checkValid(obj.order);
+    obj.result = this.result + value;
+    return obj;
   },
   // eslint-disable-next-line consistent-return
   checkOrder(order) {

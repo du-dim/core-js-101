@@ -125,12 +125,12 @@ const cssSelectorBuilder = {
   errorText1: 'Element, id and pseudo-element should not occur more then one time inside the selector',
   errorText2: 'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element',
 
-  element(value) { return this.bodSolve(0, value); },
-  id(value) { return this.bodSolve(1, `#${value}`); },
-  class(value) { return this.bodSolve(2, `.${value}`); },
-  attr(value) { return this.bodSolve(3, `[${value}]`); },
-  pseudoClass(value) { return this.bodSolve(4, `:${value}`); },
-  pseudoElement(value) { return this.bodSolve(5, `::${value}`); },
+  element(value) { return this.bodySolve(0, value); },
+  id(value) { return this.bodySolve(1, `#${value}`); },
+  class(value) { return this.bodySolve(2, `.${value}`); },
+  attr(value) { return this.bodySolve(3, `[${value}]`); },
+  pseudoClass(value) { return this.bodySolve(4, `:${value}`); },
+  pseudoElement(value) { return this.bodySolve(5, `::${value}`); },
 
   combine(selector1, combinator, selector2) {
     const obj = Object.create(this);
@@ -142,7 +142,7 @@ const cssSelectorBuilder = {
     return this.result;
   },
 
-  bodSolve(num, value) {
+  bodySolve(num, value) {
     const obj = Object.create(this);
     obj.order = this.order.concat(num);
     this.checkOrder(obj.order);

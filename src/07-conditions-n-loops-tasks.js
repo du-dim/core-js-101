@@ -1,3 +1,5 @@
+/* eslint-disable one-var-declaration-per-line */
+/* eslint-disable one-var */
 /* *************************************************************************************************
  *                                                                                                *
  * Please read the following tutorial before implementing tasks:                                   *
@@ -27,8 +29,10 @@
  *  21 => 'Fizz'
  *
  */
-function getFizzBuzz(/* num */) {
-  throw new Error('Not implemented');
+function getFizzBuzz(num) {
+  // eslint-disable-next-line no-nested-ternary
+  return (num % 3 === 0 && num % 5 === 0) ? 'FizzBuzz' : num % 3 === 0 ? 'Fizz' : num % 5 === 0 ? 'Buzz' : num;
+  // throw new Error('Not implemented');
 }
 
 
@@ -43,8 +47,9 @@ function getFizzBuzz(/* num */) {
  *   5  => 120
  *   10 => 3628800
  */
-function getFactorial(/* n */) {
-  throw new Error('Not implemented');
+function getFactorial(n) {
+  return Array(n).fill().map((_, i) => i + 1).reduce((a, b) => a * b, 1);
+  // throw new Error('Not implemented');
 }
 
 
@@ -60,8 +65,9 @@ function getFactorial(/* n */) {
  *   5,10  =>  45 ( = 5+6+7+8+9+10 )
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
-function getSumBetweenNumbers(/* n1, n2 */) {
-  throw new Error('Not implemented');
+function getSumBetweenNumbers(n1, n2) {
+  return Array(n2 - n1 + 1).fill().map((_, i) => i + n1).reduce((a, b) => a + b);
+  // throw new Error('Not implemented');
 }
 
 
@@ -80,8 +86,10 @@ function getSumBetweenNumbers(/* n1, n2 */) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+  const sides = [a, b, c].sort((x, y) => x - y);
+  return sides[0] + sides[1] > sides[2];
+  // throw new Error('Not implemented');
 }
 
 
@@ -117,8 +125,13 @@ function isTriangle(/* a, b, c */) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  const t1 = rect1.top, l1 = rect1.left, w1 = rect1.width, h1 = rect1.height;
+  const t2 = rect2.top, l2 = rect2.left, w2 = rect2.width, h2 = rect2.height;
+  const Y = t1 < t2 ? t2 - t1 - h1 : t1 - t2 - h2;
+  const X = l1 < l2 ? l2 - l1 - w1 : l1 - l2 - w2;
+  return Y < 0 && X < 0;
+  // throw new Error('Not implemented');
 }
 
 

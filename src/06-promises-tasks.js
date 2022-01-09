@@ -103,6 +103,7 @@ function getFastestPromise(array) {
  *    });
  *
  */
+
 function chainPromises(array, action) {
   return new Promise((resolve) => {
     const newArr = [];
@@ -112,7 +113,20 @@ function chainPromises(array, action) {
     });
   }).then((arr) => arr.reduce(action));
 }
-
+/*
+function chainPromises(array, action) {
+  const newArr = [];
+  function recursion(index) {
+    // eslint-disable-next-line consistent-return
+    return array[index].then((val) => {
+      newArr.push(val);
+      if (index < array.length - 1) return recursion(index + 1);
+      if (index === array.length - 1) return newArr;
+    });
+  }
+  return recursion(0).then((arr) => arr.reduce(action));
+}
+*/
 module.exports = {
   willYouMarryMe,
   processAllPromises,
